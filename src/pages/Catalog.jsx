@@ -3,14 +3,10 @@ import Card from "../components/Card";
 import { shoes } from "../data/shoes";
 
 export default function Catalog() {
-
-
-
-  
   return (
-    <main className="min-h-screen bg-gray-50">
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        {/* Header */}
+    <div className="min-h-screen bg-gray-50">
+      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        {/* Title Header Section */}
         <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
             <Link
@@ -34,7 +30,7 @@ export default function Catalog() {
             <Card key={shoe.id} shoe={shoe} />
           ))}
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }

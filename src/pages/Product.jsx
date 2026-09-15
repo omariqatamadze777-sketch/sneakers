@@ -1,10 +1,8 @@
-import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { shoes } from "../data/shoes";
 
 export default function Product() {
   const { id } = useParams();
-  const [activeIndex, setActiveIndex] = useState(0);
 
   // URL params are strings, ids in the data are numbers.
   const product = shoes.find((item) => item.id === Number(id));
@@ -24,10 +22,6 @@ export default function Product() {
     );
   }
 
-  // Main image first, then the rest of the gallery.
-  const gallery = [product.image, ...product.images];
-  const activeImage = gallery[activeIndex] ?? product.image;
-
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
@@ -41,34 +35,27 @@ export default function Product() {
         <div className="mt-6 grid gap-10 lg:grid-cols-2">
           {/* Gallery */}
           <div>
-            <div className="aspect-square overflow-hidden rounded-2xl bg-white ring-1 ring-gray-200">
+            <div className="aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-stone-100 via-white to-slate-100 p-4 shadow-sm ring-1 ring-gray-200">
               <img
-                src={activeImage}
+                src={product.image}
                 alt={`${product.brand} ${product.model}`}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-contain mix-blend-multiply"
               />
             </div>
 
-            {gallery.length > 1 && (
-              <div className="mt-4 grid grid-cols-4 gap-3">
-                {gallery.map((src, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    onClick={() => setActiveIndex(index)}
-                    aria-label={`Show photo ${index + 1}`}
-                    className={`aspect-square overflow-hidden rounded-xl bg-white ring-2 transition ${
-                      index === activeIndex
-                        ? "ring-indigo-600"
-                        : "ring-transparent hover:ring-gray-300"
-                    }`}
+            {product.images.length > 0 && (
+              <div className="mt-4 grid grid-cols-2 gap-4">
+                {product.images.map((src, index) => (
+                  <div
+                    key={src}
+                    className="aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-stone-100 via-white to-slate-100 p-3 shadow-sm ring-1 ring-gray-200"
                   >
                     <img
                       src={src}
-                      alt=""
-                      className="h-full w-full object-cover"
+                      alt={`${product.brand} ${product.model} view ${index + 2}`}
+                      className="h-full w-full object-contain mix-blend-multiply transition duration-300 hover:scale-105"
                     />
-                  </button>
+                  </div>
                 ))}
               </div>
             )}
