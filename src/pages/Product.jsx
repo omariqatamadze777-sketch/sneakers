@@ -1,7 +1,6 @@
 import { Link, useParams } from "react-router-dom";
-import { shoes } from "../data/shoes";
 
-export default function Product() {
+export default function Product({ shoes }) {
   const { id } = useParams();
 
   // URL params are strings, ids in the data are numbers.

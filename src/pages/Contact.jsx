@@ -2,11 +2,36 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Contact() {
-  const [submitted, setSubmitted] = useState(false);
+  const [result, setResult] = useState("");
+  const [loading, setLoading] = useState(false);
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    setResult("Sending...");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSubmitted(true);
+    const formData = new FormData(event.target);
+    // Web3Forms Access Key
+    formData.append("access_key", "525e9c30-7a0e-4bd8-bd33-f088cd979f92");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setResult("Form Submitted Successfully");
+        event.target.reset();
+      } else {
+        setResult(data.message || "Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      setResult("Error submitting form. Please check your connection.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -77,86 +102,88 @@ export default function Contact() {
 
           </div>
 
-          {/* Right Column: Contact Form */}
+          {/* Right Column: Active Web3Forms Contact Form */}
           <div className="rounded-3xl border border-slate-100 bg-white p-8 shadow-sm lg:col-span-2">
-            {submitted ? (
-              <div className="flex h-full flex-col items-center justify-center py-12 text-center">
-                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 text-2xl text-emerald-600">
-                  ✓
-                </div>
-                <h3 className="text-xl font-bold text-slate-900">Message Sent!</h3>
-                <p className="mt-2 max-w-md text-xs text-slate-500">
-                  Thank you for reaching out. Our support team will get back to you shortly.
-                </p>
-                <button
-                  onClick={() => setSubmitted(false)}
-                  className="mt-6 rounded-full bg-slate-900 px-6 py-2.5 text-xs font-semibold text-white hover:bg-slate-800 transition-colors"
-                >
-                  Send another message
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <h2 className="text-lg font-bold text-slate-900">Send us a message</h2>
-                
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700">
-                      Your Name
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="John Doe"
-                      className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-900 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="john@example.com"
-                      className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-900 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all"
-                    />
-                  </div>
-                </div>
-
+            <form onSubmit={onSubmit} className="space-y-6">
+              <h2 className="text-lg font-bold text-slate-900">Send us a message</h2>
+              
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700">
-                    Subject
+                    Your Name
                   </label>
-                  <select className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-900 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all">
-                    <option>General Inquiry</option>
-                    <option>Order Status / Shipping</option>
-                    <option>Size & Fit Questions</option>
-                    <option>Returns & Exchange</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700">
-                    Message
-                  </label>
-                  <textarea
-                    rows={5}
+                  <input
+                    type="text"
+                    name="name"
                     required
-                    placeholder="How can we help you?"
-                    className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-900 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all resize-none"
-                  ></textarea>
+                    placeholder="John Doe"
+                    className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-900 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all"
+                  />
                 </div>
 
-                <button
-                  type="submit"
-                  className="w-full rounded-xl bg-slate-900 py-3.5 text-xs font-bold text-white hover:bg-indigo-600 shadow-md transition-colors"
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    placeholder="john@example.com"
+                    className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-900 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700">
+                  Subject
+                </label>
+                <select 
+                  name="subject"
+                  className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-900 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all"
                 >
-                  Send Message
-                </button>
-              </form>
-            )}
+                  <option value="General Inquiry">General Inquiry</option>
+                  <option value="Order Status / Shipping">Order Status / Shipping</option>
+                  <option value="Size & Fit Questions">Size & Fit Questions</option>
+                  <option value="Returns & Exchange">Returns & Exchange</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700">
+                  Message
+                </label>
+                <textarea
+                  name="message"
+                  rows={5}
+                  required
+                  placeholder="How can we help you?"
+                  className="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-900 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all resize-none"
+                ></textarea>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-xl bg-slate-900 py-3.5 text-xs font-bold text-white hover:bg-indigo-600 shadow-md transition-colors disabled:opacity-50"
+              >
+                {loading ? "Sending..." : "Submit Form"}
+              </button>
+
+              {/* Status Banner */}
+              {result && (
+                <div 
+                  className={`mt-4 rounded-xl p-3 text-center text-xs font-semibold ${
+                    result === "Form Submitted Successfully"
+                      ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                      : "bg-amber-50 text-amber-800 border border-amber-200"
+                  }`}
+                >
+                  {result}
+                </div>
+              )}
+            </form>
           </div>
 
         </div>

@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from "react-router-dom";
 
 export default function Header() {
-  const [cartCount, setCartCount] = useState(0);
   const location = useLocation();
 
-  // Helper function to handle active navigation styling
+  // Helper function to handle active navigation link styling
   const getLinkStyle = (path) => {
     const isActive = location.pathname === path;
     return isActive
@@ -16,31 +14,35 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 px-6 py-4 transition-all">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-        
         {/* Brand Logo */}
         <div className="flex items-center gap-2">
-          <Link to="/" className="text-xl font-black tracking-tight text-slate-900 hover:opacity-80">
+          <Link
+            to="/"
+            className="text-xl font-black tracking-tight text-slate-900 hover:opacity-80 transition-opacity"
+          >
             SNEAKER<span className="text-indigo-600">HUB.</span>
           </Link>
         </div>
 
-        {/* Navigation Page Links */}
-        <nav className="hidden md:flex items-center gap-8">
-          <Link to="/" className={getLinkStyle('/')}>
+        {/* Navigation Links for 3 Main Pages */}
+        <nav className="flex items-center gap-8">
+          <Link to="/" className={getLinkStyle("/")}>
             Home
           </Link>
-          <Link to="/catalog" className={getLinkStyle('/catalog')}>
+          <Link to="/catalog" className={getLinkStyle("/catalog")}>
             Catalog
           </Link>
-          <Link to="/contact" className={getLinkStyle('/contact')}>
+          <Link to="/contact" className={getLinkStyle("/contact")}>
             Contact
+          </Link>
+          <Link to="/admin" className={getLinkStyle("/admin")}>
+            Admin
           </Link>
         </nav>
 
         {/* Right Section: Search & Actions */}
         <div className="flex items-center gap-3">
-          
-          {/* Search Bar */}
+          {/* Search Input Bar */}
           <div className="relative hidden sm:block">
             <svg
               className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"
@@ -58,12 +60,16 @@ export default function Header() {
             <input
               type="text"
               placeholder="Search sneakers..."
-              className="w-48 lg:w-64 pl-9 pr-4 py-2 bg-slate-50 hover:bg-slate-100 focus:bg-white text-xs text-slate-800 rounded-full border border-slate-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all"
+              className="w-44 lg:w-56 pl-9 pr-4 py-2 bg-slate-50 hover:bg-slate-100 focus:bg-white text-xs text-slate-800 rounded-full border border-slate-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100 transition-all"
             />
           </div>
 
-          {/* Cart Button */}
-          <button className="relative flex items-center justify-center p-2 text-slate-700 hover:text-indigo-600 hover:bg-slate-50 rounded-full transition-colors">
+          {/* Cart Icon */}
+          <button
+            type="button"
+            aria-label="View Shopping Cart"
+            className="relative flex items-center justify-center p-2 text-slate-700 hover:text-indigo-600 hover:bg-slate-50 rounded-full transition-colors"
+          >
             <svg
               className="w-6 h-6"
               fill="none"
@@ -77,15 +83,14 @@ export default function Header() {
                 d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
               />
             </svg>
-            {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-bold text-white shadow-sm">
-                {cartCount}
-              </span>
-            )}
           </button>
 
           {/* Account Icon */}
-          <button className="p-2 text-slate-700 hover:text-indigo-600 hover:bg-slate-50 rounded-full transition-colors">
+          <button
+            type="button"
+            aria-label="User Account"
+            className="p-2 text-slate-700 hover:text-indigo-600 hover:bg-slate-50 rounded-full transition-colors"
+          >
             <svg
               className="w-6 h-6"
               fill="none"
@@ -100,7 +105,6 @@ export default function Header() {
               />
             </svg>
           </button>
-
         </div>
       </div>
     </header>
